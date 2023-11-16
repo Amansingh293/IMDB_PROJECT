@@ -6,6 +6,7 @@ import {
   addInLocalStorage,
   removeFromLocalStorage,
   getFromLocalStorage,
+  setLocalStorage,
 } from "../localStrorage.js";
 
 const Movies = () => {
@@ -15,11 +16,14 @@ const Movies = () => {
   const [progress, setProgress] = useState(0);
   const [disabler, setDisabler] = useState(false);
   const [watchListUpdate, setWatchListUpdate] = useState(getFromLocalStorage());
-  const [fetcherName , setFetcherName] = useState('getData');
+  const [fetcherName, setFetcherName] = useState("getData");
 
   const trendingMovieApi = `https://api.themoviedb.org/3/trending/movie/day?language=en-US&page=${pageNumber}`;
 
   const searchMovieApi = `https://api.themoviedb.org/3/search/movie?include_adult=false&language=en-US&page=${pageNumber}&query=${searchVal}`;
+
+  const genreMoviesApi =
+    "https://api.themoviedb.org/3/genre/movie/list?language=en";
 
   const options = {
     method: "GET",
@@ -30,17 +34,43 @@ const Movies = () => {
     },
   };
 
-  const getData = () => {
+  const getData = async () => {
     setDisabler(true);
-    fetch(trendingMovieApi, options)
-      .then((res) => res.json())
-      .then((json) => setMovies(json.results))
-      .catch((err) => console.error("error:" + err))
-      .finally(() => {
-        setProgress(100);
-        setDisabler(false);
-        setFetcherName('getData');
+
+    try {
+      setDisabler(true);
+      const fetchedTrendingData = await fetch(trendingMovieApi, options);
+      let trendingData = await fetchedTrendingData.json();
+      trendingData = trendingData.results;
+
+      const fetchedGenreData = await fetch(genreMoviesApi, options);
+      let genreData = await fetchedGenreData.json();
+      genreData = genreData.genres;
+
+      // mapping object
+
+      let genreDataObject = {};
+
+      genreData.forEach((obj) => {
+        genreDataObject[obj.id] = obj.name;
       });
+
+      // putting mapped values
+
+      trendingData.forEach((movie) => {
+        let genres = movie.genre_ids;
+        let updatedGenre = genres.map((id) => genreDataObject[id]);
+        movie.genre_ids = updatedGenre;
+      });
+
+      setMovies(trendingData);
+      setProgress(100);
+      setFetcherName("getData");
+      setDisabler(false);
+      console.log(pageNumber);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   function debounce(cb) {
@@ -61,12 +91,12 @@ const Movies = () => {
       .catch((err) => console.error("error:" + err))
       .finally(() => {
         setProgress(100);
-        setFetcherName('searchData');
+        setFetcherName("searchData");
       });
   }
 
   const watchListHandler = (movie) => {
-
+    // console.log
     if (isInLocalStrorage(movie.id)) {
       removeFromLocalStorage(movie.id);
     } else {
@@ -74,7 +104,6 @@ const Movies = () => {
     }
     setWatchListUpdate(getFromLocalStorage());
   };
-
 
   const handleIncrementPageNumber = () => {
     if (pageNumber === 500) {
@@ -119,41 +148,71 @@ const Movies = () => {
       />
 
       <div className="flex flex-wrap justify-start items-center gap-[4%] px-[8%] md:px-[4%] lg:px-[6%]">
-        {(movies.length === 0) ? ( (fetcherName === 'searchData') ? <div style={{marginTop : '2rem' ,fontSize: '20px'}}>No Results Found !!</div> : <div style={{marginTop : '2rem' ,fontSize: '20px'}}>Loading.......</div>) : movies.map((movie) => {
-          const { title = "", name = "", poster_path, id , vote_average } = movie;
-          return (
-            <div
-              key={id}
-              className="rounded-xl h-[20rem] w-[40vw] md:w-[28vw] lg:w-[14vw] bg-cover my-[4%] bg-slate-400 hover:scale-110 duration-300 relative"
-              style={
-                poster_path
-                  ? { backgroundImage: `url(${IMAGE_BASE_URL}${poster_path})` }
-                  : {
-                      backgroundImage: `url(https://thumbs.dreamstime.com/b/tarnow-poland-april-imdb-logo-tablet-display-screen-mdb-online-database-information-related-to-films-television-216919295.jpg)`,
-                    }
-              }
-            >
-              <div className="flex justify-center items-center absolute bottom-0 h-auto bg-slate-200 opacity-[0.8] text-sm md:text-lg w-[100%] text-center rounded-b-xl p-2">
-                {title || name}
-              </div>
-
+        {movies.length === 0 ? (
+          fetcherName === "searchData" ? (
+            <div style={{ marginTop: "2rem", fontSize: "20px" }}>
+              No Results Found !!
+            </div>
+          ) : (
+            <div style={{ marginTop: "2rem", fontSize: "20px" }}>
+              Loading.......
+            </div>
+          )
+        ) : (
+          movies.map((movie) => {
+            const {
+              title = "",
+              name = "",
+              poster_path,
+              id,
+              vote_average,
+              genre_ids,
+            } = movie;
+            return (
               <div
-                className="absolute opacity-[0.8] bg-slate-600 h-[3rem] w-[3rem] top-0 right-0 text-center rounded-lg"
-                onClick={() => watchListHandler({ title , name, poster_path, id , vote_average })}
+                key={id}
+                className="rounded-xl h-[20rem] w-[40vw] md:w-[28vw] lg:w-[14vw] bg-cover my-[4%] bg-slate-400 hover:scale-110 duration-300 relative"
+                style={
+                  poster_path
+                    ? {
+                        backgroundImage: `url(${IMAGE_BASE_URL}${poster_path})`,
+                      }
+                    : {
+                        backgroundImage: `url(https://thumbs.dreamstime.com/b/tarnow-poland-april-imdb-logo-tablet-display-screen-mdb-online-database-information-related-to-films-television-216919295.jpg)`,
+                      }
+                }
               >
+                <div className="flex justify-center items-center absolute bottom-0 h-auto bg-slate-200 opacity-[0.8] text-sm md:text-lg w-[100%] text-center rounded-b-xl p-2">
+                  {title || name}
+                </div>
+
                 <div
-                  style={
-                    isInLocalStrorage(id)
-                      ? { color: "red", fontSize: "2rem" }
-                      : { color: "white", fontSize: "2rem" }
+                  className="absolute opacity-[0.8] bg-slate-600 h-[3rem] w-[3rem] top-0 right-0 text-center rounded-lg"
+                  onClick={() =>
+                    watchListHandler({
+                      title,
+                      name,
+                      poster_path,
+                      id,
+                      vote_average,
+                      genre_ids,
+                    })
                   }
                 >
-                  &#10084;
+                  <div
+                    style={
+                      isInLocalStrorage(id)
+                        ? { color: "red", fontSize: "2rem" }
+                        : { color: "white", fontSize: "2rem" }
+                    }
+                  >
+                    &#10084;
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
 
       <div className="flex justify-evenly items-center h-[10rem] w-[98vw]">

@@ -6,7 +6,6 @@ export const getFromLocalStorage = () => {
   } else {
     movieArr = JSON.parse(localStorage.getItem("movies"));
   }
-  console.log(movieArr);
   return movieArr;
 };
 
