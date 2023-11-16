@@ -17,6 +17,7 @@ const Movies = () => {
   const [disabler, setDisabler] = useState(false);
   const [watchListUpdate, setWatchListUpdate] = useState(getFromLocalStorage());
   const [fetcherName, setFetcherName] = useState("getData");
+  const [genreDataObj , setGenreDataObj] = useState({});
 
   const trendingMovieApi = `https://api.themoviedb.org/3/trending/movie/day?language=en-US&page=${pageNumber}`;
 
@@ -62,13 +63,14 @@ const Movies = () => {
         let updatedGenre = genres.map((id) => genreDataObject[id]);
         movie.genre_ids = updatedGenre;
       });
-
+      setGenreDataObj(genreDataObject);
       setMovies(trendingData);
       setProgress(100);
       setFetcherName("getData");
       setDisabler(false);
       console.log(pageNumber);
-    } catch (err) {
+    } 
+    catch (err) {
       console.log(err);
     }
   };
@@ -87,19 +89,31 @@ const Movies = () => {
     setPageNumber(1);
     fetch(searchMovieApi, options)
       .then((res) => res.json())
-      .then((json) => setMovies(json.results))
+      .then((json) => {
+        
+        let recievedData = json.results;
+
+        recievedData.forEach((movie) => {
+          let genres = movie.genre_ids;
+          let updatedGenre = genres.map((id) => genreDataObj[id]);
+          movie.genre_ids = updatedGenre;
+        });
+      
+        setMovies(json.results);
+      })
       .catch((err) => console.error("error:" + err))
       .finally(() => {
         setProgress(100);
         setFetcherName("searchData");
-      });
+    });
   }
 
   const watchListHandler = (movie) => {
-    // console.log
+   
     if (isInLocalStrorage(movie.id)) {
       removeFromLocalStorage(movie.id);
-    } else {
+    } 
+    else {
       addInLocalStorage(movie);
     }
     setWatchListUpdate(getFromLocalStorage());
