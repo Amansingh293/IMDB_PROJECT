@@ -148,7 +148,7 @@ const Movies = () => {
         onLoaderFinished={() => setProgress(0)}
       />
       
-      <div className=" text-lg md:text-[2rem]">Trending Movies </div>
+      <div className="pt-[4%] text-lg md:text-[2rem]">Trending Movies </div>
 
       <input
         className="rounded-lg absolute right-[2%] top-[0.5%] md:top-[1%] lg:right-[2%] lg:top-[2.4%] w-[15vw] h-[2.2rem] text-center border-2 border-slate-500"
@@ -157,7 +157,7 @@ const Movies = () => {
         onChange={(e) => setSearchVal(e.target.value)}
       />
 
-      <div className="flex flex-wrap justify-start items-center gap-[4%] px-[8%] md:px-[4%] lg:px-[6%]">
+      <div className="flex flex-wrap justify-start items-center gap-[4%] mt-[2%] px-[8%] md:px-[4%] lg:px-[6%]">
         {movies.length === 0 ? (
           fetcherName === "searchData" ? (
             <div style={{ marginTop: "2rem", fontSize: "20px" }}>
