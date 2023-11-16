@@ -17,7 +17,7 @@ const Movies = () => {
   const [disabler, setDisabler] = useState(false);
   const [watchListUpdate, setWatchListUpdate] = useState(getFromLocalStorage());
   const [fetcherName, setFetcherName] = useState("getData");
-  const [genreDataObj , setGenreDataObj] = useState({});
+  const [genreDataObj, setGenreDataObj] = useState({});
 
   const trendingMovieApi = `https://api.themoviedb.org/3/trending/movie/day?language=en-US&page=${pageNumber}`;
 
@@ -69,8 +69,7 @@ const Movies = () => {
       setFetcherName("getData");
       setDisabler(false);
       console.log(pageNumber);
-    } 
-    catch (err) {
+    } catch (err) {
       console.log(err);
     }
   };
@@ -90,7 +89,6 @@ const Movies = () => {
     fetch(searchMovieApi, options)
       .then((res) => res.json())
       .then((json) => {
-        
         let recievedData = json.results;
 
         recievedData.forEach((movie) => {
@@ -98,22 +96,20 @@ const Movies = () => {
           let updatedGenre = genres.map((id) => genreDataObj[id]);
           movie.genre_ids = updatedGenre;
         });
-      
+
         setMovies(json.results);
       })
       .catch((err) => console.error("error:" + err))
       .finally(() => {
         setProgress(100);
         setFetcherName("searchData");
-    });
+      });
   }
 
   const watchListHandler = (movie) => {
-   
     if (isInLocalStrorage(movie.id)) {
       removeFromLocalStorage(movie.id);
-    } 
-    else {
+    } else {
       addInLocalStorage(movie);
     }
     setWatchListUpdate(getFromLocalStorage());
@@ -151,8 +147,8 @@ const Movies = () => {
         transitionTime={400}
         onLoaderFinished={() => setProgress(0)}
       />
-
-      <div className="text-[2rem]">Trending Movies </div>
+      
+      <div className=" text-lg md:text-[2rem]">Trending Movies </div>
 
       <input
         className="rounded-lg absolute right-[2%] top-[0.5%] md:top-[1%] lg:right-[2%] lg:top-[2.4%] w-[15vw] h-[2.2rem] text-center border-2 border-slate-500"
