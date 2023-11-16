@@ -195,7 +195,7 @@ const Watchlist = () => {
                         <img
                           src={IMAGE_BASE_URL + poster_path}
                           alt=""
-                          className=" h-[200px] w-[200px] p-1 rounded-[30px]"
+                          className=" h-[200px] w-[14rem] p-1 rounded-[30px]"
                         ></img>
                       </th>
                       <td className="px-6 py-4">{title}</td>
