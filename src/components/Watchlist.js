@@ -11,7 +11,7 @@ const Watchlist = () => {
 
   const [genreOfCurrentWatchList, setGenreOfCurrentWatchList] = useState([]);
 
-  const [updatedGenreWatchList, setUpdatedGenreWatchList] = useState([]);
+  const [selectedGenreWatchList, setSelectedGenreWatchList] = useState([]);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -34,7 +34,9 @@ const Watchlist = () => {
     let currentWatchList = [...watchlist];
 
     let genreSet = new Set();
+
     genreSet.add("All");
+
     currentWatchList.forEach((movie) => {
       let genres = movie.genre_ids;
 
@@ -44,15 +46,16 @@ const Watchlist = () => {
         }
       });
     });
+
     setGenreOfCurrentWatchList([...genreSet]);
   };
 
   const handleGenreSelection = (selectedGenre) => {
 
-    genreButtonRef.current.childNodes[0].textContent = selectedGenre;
+   genreButtonRef.current.childNodes[0].textContent = selectedGenre;
 
     if (selectedGenre === "All") {
-      setUpdatedGenreWatchList([]);
+      setSelectedGenreWatchList([]);
       return;
     }
 
@@ -66,12 +69,23 @@ const Watchlist = () => {
       return false;
     });
 
-    setUpdatedGenreWatchList(updatedWatchList);
+    setSelectedGenreWatchList(updatedWatchList);
   };
 
   const remove = (id) => {
     removeFromLocalStorage(id);
     setWatchlist(getFromLocalStorage());
+
+    let deletedMovieArray = [...selectedGenreWatchList];
+
+    deletedMovieArray = deletedMovieArray.filter((movie) => movie.id !== id);
+
+    if (deletedMovieArray.length === 0) {
+      setSelectedGenreWatchList([]);
+      genreButtonRef.current.childNodes[0].textContent = 'All';
+    } else {
+      setSelectedGenreWatchList(deletedMovieArray);
+    }
   };
 
   useEffect(() => {
@@ -128,7 +142,7 @@ const Watchlist = () => {
 
           <button
             type="button"
-            className=" self-start mx-[5%] text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            className=" self-start mx-[5%] text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-[0.7rem] me-2  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
             onClick={sort}
           >
             Sort By Rating
@@ -162,9 +176,9 @@ const Watchlist = () => {
                 </tr>
               </thead>
               <tbody>
-                {(updatedGenreWatchList.length === 0
+                {(selectedGenreWatchList.length === 0
                   ? watchlist
-                  : updatedGenreWatchList
+                  : selectedGenreWatchList
                 ).map((movie) => {
                   let { title, vote_average, poster_path, id, genre_ids } =
                     movie;
