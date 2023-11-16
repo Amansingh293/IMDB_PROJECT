@@ -98,7 +98,7 @@ const Watchlist = () => {
         className="flex flex-col items-center w-full"
         onClick={() => (isOpen ? setIsOpen(false) : {})}
       >
-        <div className="flex justify-end items-center w-[100%] px-20 py-5">
+        <div className="flex justify-end items-center w-[103vw]  md:w-[100%] px-20 py-5">
           <div className="relative">
             <button
               id="dropdownDefaultButton"

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { API_KEY, IMAGE_BASE_URL } from "../constant.js";
 import LoadingBar from "react-top-loading-bar";
+
 import {
   isInLocalStrorage,
   addInLocalStorage,
@@ -181,7 +182,7 @@ const Movies = () => {
             return (
               <div
                 key={id}
-                className="rounded-xl h-[20rem] w-[40vw] md:w-[28vw] lg:w-[14vw] bg-cover my-[4%] bg-slate-400 hover:scale-110 duration-300 relative"
+                className="rounded-xl h-[15rem] md:h-[20rem] w-[40vw] md:w-[28vw] lg:w-[14vw] bg-cover my-[4%] bg-slate-400 hover:scale-110 duration-300 relative"
                 style={
                   poster_path
                     ? {
@@ -216,7 +217,7 @@ const Movies = () => {
                         : { color: "white", fontSize: "2rem" }
                     }
                   >
-                    &#10084;
+                  &#10084;
                   </div>
                 </div>
               </div>
