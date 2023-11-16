@@ -28,9 +28,9 @@ const Banner = () => {
 
   return (
     <>
-      <div className="flex flex-nowrap h-[75vh] w-full ">
+      <div className="flex flex-nowrap h-[30vh] md:h-[75vh] w-full ">
         {moviesImage.length === 0 ? (
-          <div className="text-center my-5 w-full text-2xl"> Loading ...</div>
+          <div className="text-center my-5 w-full"> Loading ...</div>
         ) : (
           moviesImage.map((movie) => {
             const { poster_path, title } = movie;
@@ -41,7 +41,7 @@ const Banner = () => {
                   alt=""
                   className="h-[100%] w-[100%]"
                 ></img>
-                <div className="absolute text-white bottom-0 w-[100%] h-[10%] opacity-[0.7] text-xl bg-slate-800 flex items-center justify-center">
+                <div className="absolute text-sm md:text-2xl text-white bottom-0 p-2 w-[100%] h-[auto] md:h-[10%] opacity-[0.7] bg-slate-800 flex items-center justify-center">
                   {title}
                 </div>
               </div>
