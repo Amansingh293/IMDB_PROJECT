@@ -48,7 +48,8 @@ const Watchlist = () => {
   };
 
   const handleGenreSelection = (selectedGenre) => {
-    genreButtonRef.current.textContent = selectedGenre;
+
+    genreButtonRef.current.childNodes[0].textContent = selectedGenre;
 
     if (selectedGenre === "All") {
       setUpdatedGenreWatchList([]);
@@ -64,7 +65,6 @@ const Watchlist = () => {
 
       return false;
     });
-    console.log(updatedWatchList);
 
     setUpdatedGenreWatchList(updatedWatchList);
   };
