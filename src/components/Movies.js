@@ -9,6 +9,7 @@ import {
   getFromLocalStorage,
   setLocalStorage,
 } from "../localStrorage.js";
+import useDebounce from "../hooks/Debounce.js";
 
 const Movies = () => {
   const [movies, setMovies] = useState([]);
@@ -64,6 +65,7 @@ const Movies = () => {
         let updatedGenre = genres.map((id) => genreDataObject[id]);
         movie.genre_ids = updatedGenre;
       });
+      
       setGenreDataObj(genreDataObject);
       setMovies(trendingData);
       setProgress(100);
@@ -75,15 +77,7 @@ const Movies = () => {
     }
   };
 
-  function debounce(cb) {
-    let timerId;
-    return function () {
-      clearTimeout(timerId);
-      timerId = setTimeout(cb, 1000);
-    };
-  }
-
-  const searchData = debounce(searchFetcher);
+  const searchData = useDebounce(searchFetcher);
 
   function searchFetcher() {
     setPageNumber(1);
