@@ -50,7 +50,9 @@ const Banner = () => {
     <>
       <div className="flex flex-wrap h-[50vh] md:h-[75vh] w-full overflow-hidden ">
         {moviesImage.length === 0 ? (
-          <div className="text-center my-5 w-full"> Loading ...</div>
+          <div className="loaderParent">
+            <div className="loader"></div>
+          </div>
         ) : (
           moviesImage.map((movie, i) => {
             const { poster_path, title } = movie;

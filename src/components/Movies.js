@@ -143,7 +143,7 @@ const Movies = () => {
         transitionTime={400}
         onLoaderFinished={() => setProgress(0)}
       />
-      
+
       <div className="pt-[4%] text-lg md:text-[2rem]">Trending Movies </div>
 
       <input
@@ -160,8 +160,8 @@ const Movies = () => {
               No Results Found !!
             </div>
           ) : (
-            <div style={{ marginTop: "2rem", fontSize: "20px" }}>
-              Loading.......
+            <div className="loaderParent">
+              <div className="loader"></div>
             </div>
           )
         ) : (
