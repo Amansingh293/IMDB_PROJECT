@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { API_KEY, IMAGE_BASE_URL } from "../constant.js";
+import { IMAGE_BASE_URL } from "../constant.js";
 import LoadingBar from "react-top-loading-bar";
 
 import {
@@ -7,7 +7,6 @@ import {
   addInLocalStorage,
   removeFromLocalStorage,
   getFromLocalStorage,
-  setLocalStorage,
 } from "../localStrorage.js";
 import useDebounce from "../hooks/Debounce.js";
 
@@ -33,7 +32,7 @@ const Movies = () => {
     headers: {
       accept: "application/json",
       Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmYWNkZjg2MGJlZTY2ZjZiYjIyNjNkNWQ2M2YyYWZlMyIsInN1YiI6IjY1M2JkYzRhNTkwN2RlMDEzOGUwZGI4ZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ugFk-MLJggRNRJ_0w1yX8xd6EhpB5jaaH-QJelCl_ds",
+        process.env.auth_token,
     },
   };
 
@@ -130,7 +129,9 @@ const Movies = () => {
     } else {
       getData();
     }
-  }, [pageNumber, searchVal]);
+  },
+// eslint-disable-next-line
+  [pageNumber, searchVal]); 
 
   return (
     <div className="flex flex-col items-center py-[2%] relative">
