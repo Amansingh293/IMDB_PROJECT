@@ -155,7 +155,7 @@ const Watchlist = () => {
               WatchList Empty !!
             </div>
           ) : (
-            <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 w-full">
+            <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 w-[80rem] md:w-full overflow-auto">
               <thead className="text-lg text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 h-[5rem]">
                 <tr>
                   <th scope="col" className="px-6 py-3">
