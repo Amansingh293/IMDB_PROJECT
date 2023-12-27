@@ -70,7 +70,6 @@ const Movies = () => {
       setProgress(100);
       setFetcherName("getData");
       setDisabler(false);
-      console.log(pageNumber);
     } catch (err) {
       console.log(err);
     }

@@ -29,7 +29,6 @@ const Banner = () => {
     fetch(trendingMovieApi, options)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data.results);
         return setMoviesImage(data.results);
       })
       .catch((err) => console.log(err.message));
