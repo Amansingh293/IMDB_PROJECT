@@ -32,10 +32,10 @@ const Movies = () => {
     headers: {
       accept: "application/json",
       Authorization:
-        process.env.auth_token,
+        process.env.REACT_APP_AUTH_TOKEN,
     },
   };
-
+  
   const getData = async () => {
     setDisabler(true);
 
