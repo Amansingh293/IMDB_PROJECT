@@ -4,16 +4,6 @@ import { IMAGE_BASE_URL } from "../constant";
 const Banner = () => {
   const [moviesImage, setMoviesImage] = useState([]);
 
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const imageSlider = () => {
-    if (moviesImage.length === 0) {
-      setActiveIndex(1);
-      return;
-    }
-    setActiveIndex((activeIndex) => (activeIndex + 1) % moviesImage.length);
-  };
-
   const trendingMovieApi = `https://api.themoviedb.org/3/trending/movie/day?language=en-US&page=1`;
 
   const options = {
@@ -29,17 +19,10 @@ const Banner = () => {
     fetch(trendingMovieApi, options)
       .then((res) => res.json())
       .then((data) => {
-        return setMoviesImage(data.results);
+        return setMoviesImage(data.results.slice(0,4));
       })
       .catch((err) => console.log(err.message));
   };
-
-  useEffect(() => {
-    let timerId = setTimeout(imageSlider, 2500);
-    return () => {
-      clearTimeout(timerId);
-    };
-  }, [activeIndex]);
 
   useEffect(() => {
     getData();
@@ -59,14 +42,6 @@ const Banner = () => {
               <div
                 key={title + i}
                 className="relative w-[50%] md:w-[25%]  h-[100%]"
-                style={
-                  activeIndex === i ||
-                  (activeIndex + 1 === i) % moviesImage.length ||
-                  (activeIndex + 2 === i) % moviesImage.length ||
-                  (activeIndex + 3 === i) % moviesImage.length
-                    ? { display: "flex" }
-                    : { display: "none" }
-                }
               >
                 <img
                   src={IMAGE_BASE_URL + poster_path}
