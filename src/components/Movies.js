@@ -143,7 +143,7 @@ const Movies = () => {
         onLoaderFinished={() => setProgress(0)}
       />
 
-      <div className="pt-[4%] text-lg md:text-[2rem]">Trending Movies </div>
+      <div className="pt-[4%] text-lg md:text-[2rem]"> {(searchVal.length === 0) ? "Trending Movies" : "Searched Movies"}</div>
 
       <input
         className="rounded-lg absolute right-[2%] top-[0.5%] md:top-[1%] lg:right-[2%] lg:top-[2.4%] w-[15vw] h-[2.2rem] text-center border-2 border-slate-500"
